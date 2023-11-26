@@ -21,7 +21,7 @@
 2. Download the [pre-trained DAMSM](https://drive.google.com/open?id=1zIrXCE9F6yfbEJIbNP5-YrEe2pZcPSGJ) for coco and save it to `DAMSMencoders/`
 
 ## Trained model
-you can download our trained models from our [onedrive repo](https://www.aliyundrive.com/s/bd9SPBGtwZp)
+you can download our trained models from our [drive repo](https://www.aliyundrive.com/s/bd9SPBGtwZp)
 
 ## Start training
 Run main.py file. Please adjust args in the file as your need.
