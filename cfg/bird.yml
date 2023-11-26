@@ -1,0 +1,33 @@
+CONFIG_NAME: 'bird_myexp03'
+
+DATASET_NAME: 'birds'
+DATA_DIR: '/data3/yukai/data/birds'
+GPU_ID: 2
+WORKERS: 1
+
+
+B_VALIDATION: False # False  # False
+RESTORE: True
+loss: 'hinge'
+
+TREE:
+    BRANCH_NUM: 1
+    BASE_SIZE: 256
+
+
+TRAIN:
+    NF: 64 # default 64
+    BATCH_SIZE: 80 #24
+    MAX_EPOCH: 400
+    # NET_G: '/home/yukai/exp/txt2im/testssd/netG_550.pth' # when validation, put the path of the trained model here
+    NET_G: '/home/yukai/exp/txt2im/tmp/bird_myexp02/64/models/netG_400.pth' # when validation, put the path of the trained model here
+    WARMUP_EPOCHS: 100
+    GSAVE_INTERVAL: 10
+    DSAVE_INTERVAL: 10
+
+
+TEXT:
+    EMBEDDING_DIM: 256
+    CAPTIONS_PER_IMAGE: 10
+    DAMSM_NAME: '/data3/yukai/DAMSMencoders/bird/text_encoder200.pth'
+

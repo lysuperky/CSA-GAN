@@ -1,0 +1,33 @@
+CONFIG_NAME: 'coco_myexp03'
+
+DATASET_NAME: 'coco'
+DATA_DIR: '/data3/yukai/data/coco'
+GPU_ID: 2
+WORKERS: 1
+
+
+B_VALIDATION: True # True  # False
+RESTORE: False
+
+loss: 'hinge'
+TREE:
+    BRANCH_NUM: 1
+    BASE_SIZE: 256
+
+
+TRAIN:
+    NF: 64 # default 64
+    BATCH_SIZE: 24
+    MAX_EPOCH: 120
+    # NET_G: '/home/yukai/exp/txt2im/tmp/coco_myexp02/64/models/netG_300.pth' # when validation, put the path of the trained model here
+    NET_G: '/data3/yukai/tmp/coco_myexp02/64/models/netG_300.pth' # when validation, put the path of the trained model here
+    # NET_G: '/home/yukai/exp/txt2im/testssd/netG_550.pth' # when validation, put the path of the trained model here
+    WARMUP_EPOCHS: 0
+    GSAVE_INTERVAL: 5
+    DSAVE_INTERVAL: 10
+
+
+TEXT:
+    EMBEDDING_DIM: 256
+    CAPTIONS_PER_IMAGE: 5
+    DAMSM_NAME: '/data3/yukai/DAMSMencoders/coco/text_encoder100.pth'
