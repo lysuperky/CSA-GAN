@@ -59,49 +59,49 @@ class ResBlock(nn.Module):
         out += residual
         return out
 
-# class DCM_NEXT_STAGE(nn.Module):
-#     def __init__(self, ngf, nef, ncf):
-#         super(DCM_NEXT_STAGE, self).__init__()
-#         self.gf_dim = ngf
-#         self.ef_dim = nef
-#         self.cf_dim = ncf
-#         self.num_residual = 2
-#         self.define_module()
+class DCM_NEXT_STAGE(nn.Module):
+    def __init__(self, ngf, nef, ncf):
+        super(DCM_NEXT_STAGE, self).__init__()
+        self.gf_dim = ngf
+        self.ef_dim = nef
+        self.cf_dim = ncf
+        self.num_residual = 2
+        self.define_module()
 
-#     def _make_layer(self, block, channel_num):
-#         layers = []
-#         for i in range(2):
-#             layers.append(block(channel_num))
-#         return nn.Sequential(*layers)
+    def _make_layer(self, block, channel_num):
+        layers = []
+        for i in range(2):
+            layers.append(block(channel_num))
+        return nn.Sequential(*layers)
 
-#     def define_module(self):
-#         ngf = self.gf_dim
-#         self.att = SPATIAL_ATT(ngf, self.ef_dim)
-#         self.color_channel_att = DCM_CHANNEL_ATT(ngf, self.ef_dim)
-#         self.residual = self._make_layer(ResBlock, ngf * 3)
+    def define_module(self):
+        ngf = self.gf_dim
+        self.att = SPATIAL_ATT(ngf, self.ef_dim)
+        self.color_channel_att = DCM_CHANNEL_ATT(ngf, self.ef_dim)
+        self.residual = self._make_layer(ResBlock, ngf * 3)
 
-#         self.block = nn.Sequential(
-#             conv3x3(ngf * 3, ngf * 2),
-#             nn.InstanceNorm2d(ngf * 2),
-#             GLU())
+        self.block = nn.Sequential(
+            conv3x3(ngf * 3, ngf * 2),
+            nn.InstanceNorm2d(ngf * 2),
+            GLU())
 
-#         self.SAIN = ACM(ngf * 3)
+        self.SAIN = ACM(ngf * 3)
 
-#     def forward(self, h_code, c_code, word_embs, mask, img):
+    def forward(self, h_code, c_code, word_embs, mask, img):
 
-#         self.att.applyMask(mask)
-#         c_code, att = self.att(h_code, word_embs)
-#         c_code_channel, att_channel = self.color_channel_att(c_code, word_embs, h_code.size(2), h_code.size(3))
-#         c_code = c_code.view(word_embs.size(0), -1, h_code.size(2), h_code.size(3))
+        self.att.applyMask(mask)
+        c_code, att = self.att(h_code, word_embs)
+        c_code_channel, att_channel = self.color_channel_att(c_code, word_embs, h_code.size(2), h_code.size(3))
+        c_code = c_code.view(word_embs.size(0), -1, h_code.size(2), h_code.size(3))
 
-#         h_c_code = torch.cat((h_code, c_code), 1)
-#         h_c_c_code = torch.cat((h_c_code, c_code_channel), 1)
-#         h_c_c_img_code = self.SAIN(h_c_c_code, img)
+        h_c_code = torch.cat((h_code, c_code), 1)
+        h_c_c_code = torch.cat((h_c_code, c_code_channel), 1)
+        h_c_c_img_code = self.SAIN(h_c_c_code, img)
 
-#         out_code = self.residual(h_c_c_img_code)
-#         out_code = self.block(out_code)
+        out_code = self.residual(h_c_c_img_code)
+        out_code = self.block(out_code)
 
-#         return out_code
+        return out_code
 
 
 class INIT_STAGE_G(nn.Module):
@@ -177,8 +177,8 @@ class DCM(nn.Module):
 
     def forward(self,x, rel_feat, sent_emb, word_embs, mask, c_code):
         r_code = self.upsample(rel_feat)
-        tmp_code = self.h_net(x, c_code, words_embs, mask, r_code)
-        tmp_r_code = self,SAIN(tmp_code, r_code)
+        tmp_code = self.h_net(x, c_code, word_embs, mask, r_code)
+        tmp_r_code = self.SAIN(tmp_code, r_code)
         fake_img = self.img_net(tmp_r_code)
 
         return fake_img
